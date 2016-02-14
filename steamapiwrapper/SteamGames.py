@@ -55,7 +55,12 @@ class Games(SteamAPI):
         """
         if self.appids_to_names is None or self.names_to_appids is None:
             self.appids_to_names, self.names_to_appids = self.get_ids_and_names()
-        urls = self._get_urls(self.appids_to_names.keys(), cc)
+        
+        urls = []
+        for i in self.appids_to_names.keys():
+            urls += self._get_urls([i], cc)
+
+        #urls = self._get_urls(self.appids_to_names.keys(), cc)
         for url in urls:
             for game in self._get_games_from(url):
                 yield game
