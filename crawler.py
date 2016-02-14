@@ -59,8 +59,9 @@ def StartOperation(init_url:str, pages:int, filename:str)->None:
                 'w', newline='',
                 encoding='utf8')
     writer = csv.writer(file)
-    for i in range(pages):
-        url = init_url + str(num + perpage * i)
+    for i in range(1,pages):
+        url = init_url + str(i)
+        print(url)
         res = requests.get(url)
         try:
             res.raise_for_status()
@@ -68,17 +69,19 @@ def StartOperation(init_url:str, pages:int, filename:str)->None:
             print('There is a problem:', e)
     
         soup = BeautifulSoup(res.text, 'lxml')
-        names = soup.select('div > div > span[class="title"]')
-        # urls = soup.select('tr[class] > td[class="title"] > a[class=""]')     
+        names = soup.select('a > div[class="responsive_search_name_combined"] > div > span[class="title"]')
+        prices = soup.select('a > div > div > div')
         print('Saving page %d to desktop local file %s...' % (i+1, filename))
         
         for j in range(len(names)):
+            price = prices[j].getText().strip()
             try:
-                writer.writerow([names[j].getText()])
+                writer.writerow([names[j].getText(),
+                                 price])
+                print(names[j].getText(), price)
  
             except Exception as e:
                 print('Error occured on page %d line %d' % (i+1, j+1))
-                # print(*[names[j].getText(), authors[j].getText()])
                 print('error message:', e)
                 if url not in failure_urls:
                         failure_urls.append(url)
@@ -91,13 +94,11 @@ def StartOperation(init_url:str, pages:int, filename:str)->None:
 if __name__ == '__main__':
 
     # The following is for development test:
-    target_url = "http://store.steampowered.com/search/?tags=599&page=1#sort_by=_ASC&page="
-    
-    url = target_url
-    pgm = 147
+    target_url = "http://store.steampowered.com/search/?page="
+    pgm = 6
     fln = "dev_test_file.csv"
     # url, pgm, fln = Initialization()
-    failures = StartOperation(url, pgm, fln)
+    failures = StartOperation(target_url, pgm, fln)
     if failures:
         print('[The urls below occured problem]:')
         for item in failures:
