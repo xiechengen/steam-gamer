@@ -72,6 +72,7 @@ class Games(SteamAPI):
             game = Game(page[appid], appid)
             if game.success:
                 yield game
+            #print "False"
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""

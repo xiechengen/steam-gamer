@@ -8,13 +8,16 @@ class SteamError(Exception):
 
 class SteamAPI:
     """Base class for our other Steam API classes"""
+    api_key = 'FC65FE32E5732FC54BC70256CDA122BB'
+    steam_id = '76561198053933752'
+    time = 60
+    retries = 3
 
     def __init__(self, steam_id, api_key):
         """Sets the steam id of the user in question and your API key."""
         self.api_key = api_key
         self.steam_id = steam_id
-        self.time = 10
-        self.retries = 3
+        
 
 
     def _get_json(self, url, params = None):
@@ -37,9 +40,11 @@ class SteamAPI:
 
         """
         try:
+            sleep(0.1)
             return urllib2.urlopen(url)
         except urllib2.URLError as e:
-            print 'URLError = ' + str(e.reason)
+            #print 'URLError = ' + str(e.reason)
+            return self._retry(url)
         except urllib2.HTTPError as e:
             print 'HTTPError = ' + str(e.code)
             return self._retry(self, url, self.time, self.tries)
@@ -50,8 +55,9 @@ class SteamAPI:
 
     def _retry(self, url):
         """Retries your request n number of times"""
-        print "{} is unreachable, retrying {} number of times".format(url, self.retries)
+        
         for num in range(self.retries):
+            print "{} is unreachable, retrying {} number of times".format(url, num + 1)
             try:
                 return urllib2.urlopen(url)
             except:
