@@ -13,3 +13,8 @@ A project building a web app for steam sales and price tracker
 ### useful apis
 1. steam price api: http://store.steampowered.com/api/appdetails?appids=57690
 2. get all app id: http://api.steampowered.com/ISteamApps/GetAppList/v0001/
+
+###Notice
+SteamAPIwrapper3 is rewritten version of steamapiwrapper, the main changes are:
+1. replace urllib and urllib2 with requests
+2. python2 and python3 language compatability
