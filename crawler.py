@@ -4,8 +4,6 @@ import requests, csv
 from bs4 import BeautifulSoup
 
 # for test using csv file as data storage temporarily
-target_url = "http://store.steampowered.com/search/?tags=599&page=1#sort_by=_ASC&page=1"
-
 class WrongURL(Exception):
     def __str__(self):
         return "Invalid url input, input should be valid url of game index."
@@ -46,4 +44,63 @@ def Initialization():
                 continue
         if url and pagenum and filename:
             break
-    return (url, pagenum, filename)     
+    return (url, pagenum, filename)
+
+def StartOperation(init_url:str, pages:int, filename:str)->None:
+    '''
+    type init_url: str
+    rtype: None
+    '''
+    num = 0
+    error_counter = 0
+    perpage = 25
+    failure_urls = []
+    file = open(r'C:\Users\spencer\Desktop\%s' % filename,
+                'w', newline='',
+                encoding='utf8')
+    writer = csv.writer(file)
+    for i in range(pages):
+        url = init_url + str(num + perpage * i)
+        res = requests.get(url)
+        try:
+            res.raise_for_status()
+        except Exception as e:
+            print('There is a problem:', e)
+    
+        soup = BeautifulSoup(res.text, 'lxml')
+        names = soup.select('div > div > span[class="title"]')
+        # urls = soup.select('tr[class] > td[class="title"] > a[class=""]')     
+        print('Saving page %d to desktop local file %s...' % (i+1, filename))
+        
+        for j in range(len(names)):
+            try:
+                writer.writerow([names[j].getText()])
+ 
+            except Exception as e:
+                print('Error occured on page %d line %d' % (i+1, j+1))
+                # print(*[names[j].getText(), authors[j].getText()])
+                print('error message:', e)
+                if url not in failure_urls:
+                        failure_urls.append(url)
+                error_counter += 1
+    file.close()
+    if error_counter:
+        print('\nTotal failed item number: %d items!' % error_counter)
+    return failure_urls
+
+if __name__ == '__main__':
+
+    # The following is for development test:
+    target_url = "http://store.steampowered.com/search/?tags=599&page=1#sort_by=_ASC&page="
+    
+    url = target_url
+    pgm = 147
+    fln = "dev_test_file.csv"
+    # url, pgm, fln = Initialization()
+    failures = StartOperation(url, pgm, fln)
+    if failures:
+        print('[The urls below occured problem]:')
+        for item in failures:
+            print(item)
+    else:
+        print('All pages successfully scraped!')
