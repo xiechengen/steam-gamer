@@ -71,7 +71,7 @@ def StartOperation(init_url:str, pages:int, filename:str)->None:
         soup = BeautifulSoup(res.text, 'lxml')
         names = soup.select('a > div[class="responsive_search_name_combined"] > div > span[class="title"]')
         prices = soup.select('a > div > div > div')
-        print('Saving page %d to desktop local file %s...' % (i+1, filename))
+        # print('Saving page %d to desktop local file %s...' % (i+1, filename))
         
         for j in range(len(names)):
             price = prices[j].getText().strip()
