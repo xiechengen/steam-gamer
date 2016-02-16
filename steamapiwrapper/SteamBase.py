@@ -40,7 +40,7 @@ class SteamAPI:
 
         """
         try:
-            sleep(0.1)
+            sleep(0.5)
             return urllib2.urlopen(url)
         except urllib2.URLError as e:
             #print 'URLError = ' + str(e.reason)

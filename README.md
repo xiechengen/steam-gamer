@@ -1,6 +1,11 @@
 # steamgamer
 A project building a web app for steam sales and price tracker
 
+######steven rogered that!
+
+######spencer signed in...
+
+
 ###userful links
 
 1. steam price script: https://github.com/spezifanta/SteamCalculator-Scripts
@@ -9,12 +14,18 @@ A project building a web app for steam sales and price tracker
 4. http://stackoverflow.com/questions/13784059/steam-webapi-get-the-price-of-an-app
 5. python steam web api : https://github.com/naiyt/steamapiwrapper]
 6. steam store front api: https://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI
+7. steam username to id : http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=FC65FE32E5732FC54BC70256CDA122BB&vanityurl=xiechengen
+
 
 ### useful apis
 1. steam price api: http://store.steampowered.com/api/appdetails?appids=57690
 2. get all app id: http://api.steampowered.com/ISteamApps/GetAppList/v0001/
 
-###Notice
-SteamAPIwrapper3 is rewritten version of steamapiwrapper, the main changes are:
-1. replace urllib and urllib2 with requests
-2. python2 and python3 language compatability
+
+
+$.ajax({
+  url: 'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=FC65FE32E5732FC54BC70256CDA122BB&vanityurl=xiechengen',
+  dataType: 'jsonp',
+  success: function(data){// your code here
+  }
+});
