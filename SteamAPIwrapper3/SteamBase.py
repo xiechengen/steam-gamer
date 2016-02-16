@@ -41,7 +41,6 @@ class SteamAPI:
             return urllib.request.urlopen(url)
         except urllib.error.URLError as e:
             print('URLError = ' + str(e.reason))
-            return self._retry(self, url, self.time, self.tries)
         except urllib.error.HTTPError as e:
             print('HTTPError = ' + str(e.code))
         except ValueError as e:
