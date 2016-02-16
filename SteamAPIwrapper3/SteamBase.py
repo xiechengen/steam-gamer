@@ -37,7 +37,7 @@ class SteamAPI:
 
         """
         try:
-            sleep(0.2)
+            sleep(0.6)
             return urllib.request.urlopen(url)
         except urllib.error.URLError as e:
             print('URLError = ' + str(e.reason))
