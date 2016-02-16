@@ -37,12 +37,13 @@ class SteamAPI:
 
         """
         try:
+            sleep(0.2)
             return urllib.request.urlopen(url)
         except urllib.error.URLError as e:
             print('URLError = ' + str(e.reason))
+            return self._retry(self, url, self.time, self.tries)
         except urllib.error.HTTPError as e:
             print('HTTPError = ' + str(e.code))
-            return self._retry(self, url, self.time, self.tries)
         except ValueError as e:
             print('Not a proper URL')
         except:
