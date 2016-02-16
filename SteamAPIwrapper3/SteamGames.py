@@ -67,7 +67,7 @@ class Games(SteamAPI):
 
     def _get_games_from(self, url):
         """Generator to create the actual game objects"""
-        page = json.loads(self._open_url(url).read())
+        page = json.loads(self._open_url(url).read().decode('utf-8'))
         for appid in page:
             game = Game(page[appid], appid)
             if game.success:
@@ -88,7 +88,7 @@ class Games(SteamAPI):
         """
         # here
         url = self._open_url("http://api.steampowered.com/ISteamApps/GetAppList/v2")
-        url_info = json.loads(url.read())
+        url_info = json.loads(url.read().decode('utf-8'))
         all_ids = {}
         all_names = {}
         for app in url_info['applist']['apps']:
