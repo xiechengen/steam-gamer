@@ -1,67 +1,63 @@
 import json
 import datetime
-import requests
+import urllib.request, urllib.error, urllib.parse
 from time import sleep
 
 class SteamError(Exception):
-    def __str__(self):
-        return 'Unable to connect to Steam. Try again later.'
-    
+    pass
+
 class SteamAPI:
-    '''Base class for steam API classes'''
-    def __init__(self, steam_id, api_key, time, retries):
-        '''Sets the steam id for the user in question and you API key.'''
+    """Base class for our other Steam API classes"""
+
+    def __init__(self, steam_id, api_key):
+        """Sets the steam id of the user in question and your API key."""
         self.api_key = api_key
         self.steam_id = steam_id
-        self.time = time
-        self.retries = retries
+        self.time = 10
+        self.retries = 3
 
-    def __get_json(self, url, params = None):
-        '''Retrieves json from a particular url, return as json obj.'''
-        if not params:
-            return json.load(self.__open_url(url))
+
+    def _get_json(self, url, params = None):
+        """Retrieves json from a particular url, and returns it as a json object."""
+        if params is None:
+            return json.load(self._open_url(url))
         else:
-            return json.load(self.__open_url(url % params))
+            return json.load(self._open_url(url % params))
 
-    def __open_url(self, url):
-        '''
-        This function is rewritten with requests, replacing the orignal urllib2
-        model. Original function documentation is as below:
-        
+    def _open_url(self, url):
+        """
         Put here to make catching exceptions easier
         
-        Sometimes Steam seems to throttle your requests if you're hitting them
-        a bit hard.
-        If you get an HTTPError from that, it will pause and retry a few times,
-        which usually results in Steam letting your next requests go through.
-        If it fails all the retries, it will just return None and continue on.
+        Sometimes Steam seems to throttle your requests if you're hitting them a bit hard.
+        If you get an HTTPError from that, it will pause and retry a few times, which usually
+        results in Steam letting your next requests go through. If it fails all the retries, it
+        will just return None and continue on.
 
         TODO - better error logging for failed requests.
-        '''
-        try:
-            return requests.get(url)
-        except requests.URLRequired as e:
-            print('URLRequired =', e)
-        except requests.HTTPError as e:
-            print('HTTPError =', e)
-            return self.__retry(self, url, self.time, self.retries)
-        except requests.exceptions.MissingSchema:
-            print('Not a proper URL')
-        except Exception as e:
-            print(e)
-            return self.__retry(self, url, self.time, self.retries)
 
-    def __retry(self, url):
-        '''Retries your request n times'''
-        print('Problem occured during request for %s, retrying %d number of\
-               times' % (url, self.retries))
-        for i in range(self.retries):
+        """
+        try:
+            return urllib.request.urlopen(url)
+        except urllib.error.URLError as e:
+            print('URLError = ' + str(e.reason))
+        except urllib.error.HTTPError as e:
+            print('HTTPError = ' + str(e.code))
+            return self._retry(self, url, self.time, self.tries)
+        except ValueError as e:
+            print('Not a proper URL')
+        except:
+            return self._retry(url, self.time, self.retries)
+
+    def _retry(self, url):
+        """Retries your request n number of times"""
+        print("{} is unreachable, retrying {} number of times".format(url, self.retries))
+        for num in range(self.retries):
             try:
-                return requests.get(url)
+                return urllib.request.urlopen(url)
             except:
                 sleep(self.time)
-        raise SteamError
+        raise SteamError('Can\'t connect to Steam. Try again later.')
+        
 
-    def __date(self, date):
-        '''Purpose unclear, left undone for now. Original code below:'''
+    def _date(self, date):
         return datetime.datetime.fromtimestamp(int(date)).strftime('%Y-%m-%d %H:%M:%S')
