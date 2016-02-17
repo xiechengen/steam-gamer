@@ -76,7 +76,11 @@ class Games(SteamAPI):
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""
-        urls = self._get_urls(appids, cc)
+        urls = []
+        for i in appids:
+            url = self._get_urls([i],cc)
+            urls += url
+
         for url in urls:
             for game in self._get_games_from(url):
                 yield game
