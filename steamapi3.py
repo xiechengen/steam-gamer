@@ -13,6 +13,10 @@ games = Games()
 getall = games.get_all("CN")
 counter = 1
 for item in getall:
-        print("#%d" % counter, " ", item.name, item.price)
-        writer.writerow([item.name, item.price])
+        try:
+            print("#%d" % counter, " ", item.name, item.price)
+            writer.writerow([item.name, item.price])
+        except UnicodeEncodeError as e:
+            print(e)
+            continue            
         counter += 1
