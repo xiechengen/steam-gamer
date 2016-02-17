@@ -14,7 +14,7 @@ class SteamAPI:
         self.api_key = api_key
         self.steam_id = steam_id
         self.time = 10
-        self.retries = 3
+        self.retries = 10
 
 
     def _get_json(self, url, params = None):

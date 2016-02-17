@@ -16,5 +16,3 @@ for item in getall:
         print("#%d" % counter, " ", item.name, item.price)
         writer.writerow([item.name, item.price])
         counter += 1
-        
-

@@ -32,7 +32,7 @@ for i in output:
 
 data = {'appids': appids, 'cc': cc, 'l': 'english', 'v': '1'}
 print "http://store.steampowered.com/api/appdetails/?{}".format(urllib.urlencode(data))
-'''
+
 
 appids_to_names, names_to_appids = games.get_ids_and_names()
 
@@ -43,7 +43,7 @@ for i in appids_to_names.keys():
     urls += games._get_urls([i], "CN")
 
 
-'''
+
 print url
 a = games._get_games_from(url)
 

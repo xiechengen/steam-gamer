@@ -70,6 +70,7 @@ def StartOperation(init_url:str, pages:int, filename:str)->None:
     
         soup = BeautifulSoup(res.text, 'lxml')
         names = soup.select('a > div[class="responsive_search_name_combined"] > div > span[class="title"]')
+        # released_date = soup.select('a > div[class="responsive_search_name_combined"] > div > span[class="title"]')
         prices = soup.select('a > div > div > div')
         # print('Saving page %d to desktop local file %s...' % (i+1, filename))
         
