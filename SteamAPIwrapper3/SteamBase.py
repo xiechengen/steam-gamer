@@ -8,13 +8,13 @@ class SteamError(Exception):
 
 class SteamAPI:
     """Base class for our other Steam API classes"""
-
+    time = 10
+    retries = 20
     def __init__(self, steam_id, api_key):
         """Sets the steam id of the user in question and your API key."""
         self.api_key = api_key
         self.steam_id = steam_id
-        self.time = 10
-        self.retries = 10
+
 
 
     def _get_json(self, url, params = None):
@@ -37,16 +37,17 @@ class SteamAPI:
 
         """
         try:
-            sleep(0.6)
             return urllib.request.urlopen(url)
         except urllib.error.URLError as e:
             print('URLError = ' + str(e.reason))
+            return self._retry(url)
         except urllib.error.HTTPError as e:
             print('HTTPError = ' + str(e.code))
+            return self._retry(url)
         except ValueError as e:
             print('Not a proper URL')
         except:
-            return self._retry(url, self.time, self.retries)
+            return self._retry(url)
 
     def _retry(self, url):
         """Retries your request n number of times"""

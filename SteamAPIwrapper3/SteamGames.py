@@ -188,7 +188,7 @@ class Game(SteamAPI):
 
     def _calc_price(self, amount):
         """Prices from the API are represented by cents -- convert to dollars"""
-        return float(amount) / 100
+        return float(amount) / 100.0
 
     def _store_url(self, appid):
         return "http://store.steampowered.com/app/{}".format(appid)
