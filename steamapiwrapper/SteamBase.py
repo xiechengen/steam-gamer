@@ -47,11 +47,11 @@ class SteamAPI:
             return self._retry(url)
         except urllib2.HTTPError as e:
             print 'HTTPError = ' + str(e.code)
-            return self._retry(self, url, self.time, self.tries)
+            return self._retry(url)
         except ValueError as e:
             print 'Not a proper URL'
         except:
-            return self._retry(url, self.time, self.retries)
+            return self._retry(url)
 
     def _retry(self, url):
         """Retries your request n number of times"""
