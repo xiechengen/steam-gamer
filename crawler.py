@@ -1,5 +1,4 @@
-#! usr/bin/env python
-#coding=utf-8
+#! python3
 import requests, csv
 from bs4 import BeautifulSoup
 
@@ -27,7 +26,6 @@ def Initialization():
             try:
                 pagenum = int(input('Please enter the page numbers you want'
                                 ' to scrape:'))
-                # here to be changed to monitor the total page number by a function
             except ValueError:
                 print('Please enter an integer!')
                 pagenum = None
@@ -61,26 +59,33 @@ def StartOperation(init_url:str, pages:int, filename:str)->None:
     writer = csv.writer(file)
     for i in range(1,pages):
         url = init_url + str(i)
-        print(url)
+        # print(url)
         res = requests.get(url)
         try:
             res.raise_for_status()
         except Exception as e:
             print('There is a problem:', e)
-    
+        # There should be four fields for now: names, prices, discounts
         soup = BeautifulSoup(res.text, 'lxml')
-        names = soup.select('a > div[class="responsive_search_name_combined"] > div > span[class="title"]')
-        # released_date = soup.select('a > div[class="responsive_search_name_combined"] > div > span[class="title"]')
-        prices = soup.select('a > div > div > div')
-        # print('Saving page %d to desktop local file %s...' % (i+1, filename))
+        names = soup.select('a > div[class="responsive_search_name_combined"] >\
+                             div > span[class="title"]')
         
-        for j in range(len(names)):
-            price = prices[j].getText().strip()
+        dis_and_prices = soup.select('a > div > div > div') # can it be seperated by bs4?
+        # manual seperation of discount and price below:
+        discounts, prices = [], []
+        for k in range(len(dis_and_prices)):
+            if k % 2 == 0:
+                discounts.append(dis_and_prices[k])
+            else:
+                prices.append(dis_and_prices[k])
+        counter = 0
+        for j in range(len(names)):            
             try:
                 writer.writerow([names[j].getText(),
-                                 price])
-                print(names[j].getText(), price)
- 
+                                 prices[j].getText().strip(),
+                                 discounts[j].getText().strip()])
+                print('#%5d' % (25*(i-1) + j), names[j].getText(), prices[j].getText().strip(),
+                                 discounts[j].getText().strip())
             except Exception as e:
                 print('Error occured on page %d line %d' % (i+1, j+1))
                 print('error message:', e)
@@ -96,7 +101,7 @@ if __name__ == '__main__':
 
     # The following is for development test:
     target_url = "http://store.steampowered.com/search/?page="
-    pgm = 6
+    pgm = 635
     fln = "dev_test_file.csv"
     # url, pgm, fln = Initialization()
     failures = StartOperation(target_url, pgm, fln)
