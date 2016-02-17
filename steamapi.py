@@ -4,7 +4,6 @@ import urllib2
 import json
 import csv
 games = Games()
-f = open('api_output.csv', 'w', newline='', encoding='utf8')
 
 '''
 url = games._get_urls(['65710'],'US')
@@ -51,10 +50,13 @@ for j in urls[:100]:
 '''
 
 getall = games.get_all("CN")
-file_writer = csv.writer(f)
-for i in getall:
-        print i.name.encode('utf-8'), i.price
-        writer.writerow([i.name , i.price])
+counter = 0
+with open("api_output.csv", 'wb') as f:
+        file_writer = csv.writer(f, delimiter=',')
+        for i in getall:
+                print "#%d" % counter, " ",i.name.encode('utf-8'), i.price
+                file_writer.writerow([i.name , i.price])
+                counter += 1
 
 '''
 def test():
