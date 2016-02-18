@@ -54,9 +54,12 @@ counter = 0
 with open("api_output.csv", 'wb') as f:
         file_writer = csv.writer(f, delimiter=',')
         for i in getall:
+            try:
                 print "#%d" % counter, " ",i.name.encode('utf-8'), i.price
                 file_writer.writerow([i.name , i.price])
-                counter += 1
+            except:
+                continue
+            counter += 1
 
 '''
 def test():

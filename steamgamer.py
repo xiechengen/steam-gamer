@@ -1,8 +1,14 @@
+import sqlite3
 from flask import Flask
 from flask import render_template
+
 from flask import request
 from steamapiwrapper.Users import SteamUser
 from steamapiwrapper.SteamGames import Games
+
+# configuration
+DATABASE = '/steam-gamer.db'
+
 
 app = Flask(__name__)
 app.debug = True
@@ -11,7 +17,6 @@ app.debug = True
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/calculator', methods=['GET', 'POST'])
 def cal():
@@ -38,6 +43,6 @@ def cal():
         return render_template('result.html', userid=userid, gamelist=gamelist, sumprice=sumprice)
     else:
         return render_template('calculator.html')
-
+        
 if __name__ == '__main__':
     app.run()

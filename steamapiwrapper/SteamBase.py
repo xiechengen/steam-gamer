@@ -10,8 +10,8 @@ class SteamAPI:
     """Base class for our other Steam API classes"""
     api_key = 'FC65FE32E5732FC54BC70256CDA122BB'
     steam_id = '76561198053933752'
-    time = 60
-    retries = 3
+    time = 0.01
+    retries = 20
 
     def __init__(self, steam_id, api_key):
         """Sets the steam id of the user in question and your API key."""
@@ -40,7 +40,6 @@ class SteamAPI:
 
         """
         try:
-            sleep(0.5)
             return urllib2.urlopen(url)
         except urllib2.URLError as e:
             #print 'URLError = ' + str(e.reason)
