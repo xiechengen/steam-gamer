@@ -4,7 +4,7 @@ import urllib.request, urllib.error, urllib.parse
 import json
 import csv
 
-file = open('api3_output.csv',
+file = open('api3_output_20160219.csv',
                 'w', newline='',
                 encoding='utf8')
 

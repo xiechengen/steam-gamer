@@ -8,8 +8,8 @@ class SteamError(Exception):
 
 class SteamAPI:
     """Base class for our other Steam API classes"""
-    time = 10
-    retries = 20
+    time = 0.05
+    retries = 100
     def __init__(self, steam_id, api_key):
         """Sets the steam id of the user in question and your API key."""
         self.api_key = api_key
