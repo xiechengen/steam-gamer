@@ -6,7 +6,7 @@ Retrieves information about Steam users from the Steam API.
 import json
 import re
 from .SteamBase import SteamAPI
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 
 
 class ProfileError(Exception):

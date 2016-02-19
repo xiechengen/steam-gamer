@@ -67,11 +67,18 @@ class Games(SteamAPI):
 
     def _get_games_from(self, url):
         """Generator to create the actual game objects"""
-        page = json.loads(self._open_url(url).read().decode('utf-8'))
+        print("jsonload start")
+        response = self._open_url(url)
+        print("url_open response stage")
+        page = json.loads(response.read().decode('utf-8'))
+        #n = 0
         for appid in page:
             game = Game(page[appid], appid)
+            #print("game object created successfully")
             if game.success:
                 yield game
+            else:
+                print("game object created successfully but game.success is not true")
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""
@@ -138,6 +145,7 @@ class Game(SteamAPI):
         if 'success' in game_json:
             self.success = game_json['success']
             if self.success:
+                print("game object created successfully")
                 self.store_url = self._store_url(self.appid)
                 data = game_json['data']
                 self.raw_json = data
@@ -182,6 +190,9 @@ class Game(SteamAPI):
                     self.categories = data['categories']
                 except KeyError:
                     self.categories = None
+            else:
+                print("game object not created successfully, marker placed at Game initialization")
+
 
         else:
             print("Error! Can't read the game info for {}".format(appid))

@@ -3,6 +3,9 @@ from steamapiwrapper3.Users import SteamUser
 import urllib.request, urllib.error, urllib.parse
 import json
 import csv
+import time
+
+start = time.clock()
 
 file = open('api3_output_20160219.csv',
                 'w', newline='',
@@ -20,3 +23,12 @@ for item in getall:
             print(e)
             continue            
         counter += 1
+
+end = time.clock()
+
+timeConsumed = end - start
+
+m , s = divmod(timeConsumed,60)
+h , m = divmod(m, 60)
+
+print ("it takes ", h ,"hours ", m, "minutes and ", s, "seconds.")
