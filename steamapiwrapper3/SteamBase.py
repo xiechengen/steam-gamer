@@ -8,8 +8,8 @@ class SteamError(Exception):
 
 class SteamAPI:
     """Base class for our other Steam API classes"""
-    time = 30
-    retries = 20
+    time = 50
+    retries = 10
     def __init__(self, steam_id, api_key):
         """Sets the steam id of the user in question and your API key."""
         self.api_key = api_key
@@ -54,7 +54,7 @@ class SteamAPI:
         """Retries your request n number of times"""
         print("{} is unreachable, retrying {} number of times".format(url, self.retries))
         for num in range(self.retries):
-            print ("for 30 seconds", num)
+            print (num ," times for 30 seconds")
             try:
                 return urllib.request.urlopen(url)
             except:
