@@ -25,7 +25,7 @@ class Games(SteamAPI):
 
     """
 
-    def __init__(self,num=None):
+    def __init__(self, num=None):
         """
         args:
         num -- number of games to query per call. The default 150 should work in most cases.
@@ -79,7 +79,6 @@ class Games(SteamAPI):
                 yield game
             else:
                 print("game object created successfully but game.success is not true")
-                continue
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""
@@ -140,7 +139,7 @@ class Game(SteamAPI):
         TODO: This is so awful. Rewrite this whole ugly method into
         smaller ones.
         """
-        
+
         self.appid = appid
         if 'success' in game_json:
             self.success = game_json['success']
