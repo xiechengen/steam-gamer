@@ -67,9 +67,9 @@ class Games(SteamAPI):
 
     def _get_games_from(self, url):
         """Generator to create the actual game objects"""
-        print("jsonload start")
+        print("Start self._open_url...")
         response = self._open_url(url)
-        print("url_open response stage")
+        print("Response get. Loading json of response page...")
         page = json.loads(response.read().decode('utf-8'))
         #n = 0
         for appid in page:
@@ -79,6 +79,7 @@ class Games(SteamAPI):
                 yield game
             else:
                 print("game object created successfully but game.success is not true")
+                continue
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""
@@ -138,9 +139,8 @@ class Game(SteamAPI):
 
         TODO: This is so awful. Rewrite this whole ugly method into
         smaller ones.
-
         """
-
+        
         self.appid = appid
         if 'success' in game_json:
             self.success = game_json['success']
