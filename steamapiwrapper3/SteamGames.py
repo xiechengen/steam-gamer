@@ -10,8 +10,6 @@ http://steamdb.info/blog/5/
 import urllib.request, urllib.parse, urllib.error
 import json
 from .SteamBase import SteamAPI
-from time import sleep
-
 
 
 class Games(SteamAPI):
@@ -27,7 +25,7 @@ class Games(SteamAPI):
 
     """
 
-    def __init__(self,num=None):
+    def __init__(self, num=None):
         """
         args:
         num -- number of games to query per call. The default 150 should work in most cases.
@@ -69,9 +67,9 @@ class Games(SteamAPI):
 
     def _get_games_from(self, url):
         """Generator to create the actual game objects"""
-        #print("jsonload start")
+        print("Start self._open_url...")
         response = self._open_url(url)
-        print("url_open response stage")
+        print("Response get. Loading json of response page...")
         page = json.loads(response.read().decode('utf-8'))
         #n = 0
         for appid in page:
@@ -80,8 +78,7 @@ class Games(SteamAPI):
             if game.success:
                 yield game
             else:
-                continue
-                #print("game object created successfully but game.success is not true")
+                print("game object created successfully but game.success is not true")
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""
@@ -141,7 +138,6 @@ class Game(SteamAPI):
 
         TODO: This is so awful. Rewrite this whole ugly method into
         smaller ones.
-
         """
 
         self.appid = appid
@@ -193,8 +189,8 @@ class Game(SteamAPI):
                     self.categories = data['categories']
                 except KeyError:
                     self.categories = None
-            #else:
-             #   print("game object not created successfully, marker placed at Game initialization")
+            else:
+                print("game object not created successfully, marker placed at Game initialization")
 
 
         else:
