@@ -31,4 +31,4 @@ timeConsumed = end - start
 m , s = divmod(timeConsumed,60)
 h , m = divmod(m, 60)
 
-print ("it takes ", h ,"hours ", m, "minutes and ", s, "seconds.")
+print("it takes ", h ,"hours ", m, "minutes and ", s, "seconds.")
