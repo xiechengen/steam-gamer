@@ -18,16 +18,18 @@ def process(rigion="CN"):
     counter = 1
     for item in getall:
         try:
-            print("#%d" % counter, " ", item.name, item.price)
-            writer.writerow([item.name, item.price])
+            print("#%d" % counter, " ", item.appid, item.name, item.price)
+            writer.writerow([item.appid, item.name, item.price])
         except UnicodeEncodeError as error:
             print(error)
             continue    
         except Exception as e:
             print(e)
+        '''
         if counter >= 10:
             print("Experiment end")
             break
+        '''
         counter += 1
     file.close()
 
