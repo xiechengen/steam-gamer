@@ -127,78 +127,88 @@ class Game(SteamAPI):
     """
     The actual Game() object -- really this is just a wrapper around the base
     json response from Steam, that makes it a bit easier to sift through the data.
-
+    Rewritten by Spencer on Feb 22nd 2016.
     """
-
-    def __init__(self, game_json, appid):
+    def __init__(self, game_json:dict, appid:str):
         """
-        This sets member variables for the various values
-        that the game object should have. Not all of these exist on all
-        appids, so there's some defaults whenever there is a key error.
-
-        TODO: This is so awful. Rewrite this whole ugly method into
-        smaller ones.
+        Initialize Game object by mark appid, save json url and
+        return game_json['data'] for further data extraction
+        using other methods below if success state is True.
         """
-
         self.appid = appid
-        if 'success' in game_json:
-            self.success = game_json['success']
-            if self.success:
-                print("game object created successfully")
-                self.store_url = self._store_url(self.appid)
-                data = game_json['data']
-                self.raw_json = data
-                self.type = data['type']
-                self.descriptidataon = data['detailed_description']
-
-                # Some appids don't have names
-                try:
-                    self.name = data['name']
-                except KeyError:
-                    self.name = "No Name"
-
-                try:
-                    self.supported_languages = data['supported_languages']
-                except KeyError:
-                    self.supported_languages = None
-
-                self.header_image = "http://cdn.steampowered.com/v/gfx/apps/{}/capsule_184x69.jpg".format(self.appid)
-                self.website = data['website']
-
-                # If any of these don't exit all of them don't exist,
-                # which is why I think it's okay to wrap them all in one try/except.
-                try:
-                    self.currency = data['price_overview']['currency']
-                    self.price = self._calc_price(data['price_overview']['initial'])
-                    self.discounted_price = self._calc_price(data['price_overview']['final'])
-                    self.discount_percent = data['price_overview']['discount_percent']
-                except KeyError:
-                    self.currency = None
-                    self.price = 0
-                    self.discounted_price = 0
-                    self.discount_percent = 0
-
-                try:
-                    self.packages = data['packages']
-                except KeyError:
-                    self.packages = None
-
-                self.platforms = data['platforms']
-
-                try:
-                    self.categories = data['categories']
-                except KeyError:
-                    self.categories = None
-            else:
-                print("game object not created successfully, marker placed at Game initialization")
-
-
+        self.success = game_json['success']
+        if self.success:
+            self.store_url = self._store_url(self.appid)
+            self.data = game_json['data']
         else:
-            print("Error! Can't read the game info for {}".format(appid))
+            print("Game object initialization failed...")
 
-    def _calc_price(self, amount):
+    # TODO: wrap following 5 methods with a keyerror detecting decorator.
+    def _basicInfo(self):
+        """
+        This method stores basic infomation of a game including 'name', 'type'
+        'release_date' and 'platforms' to instance attributes when called.
+        """
+        self.name = self.data['name']
+        self.type = self.data['type']
+        self.required_age = self.data['required_age']
+        self.release_date = self.data['release_date']['date']
+        self.platforms = self.data['platforms']   
+
+    def _priceInfo(self):
+        """
+        This method creates price related attributes when called.
+        """
+        price_info = self.data['price_overview']
+        self.discount_percent = price_info['discount_percent']
+        self.final = price_info['final']
+        self.currency = price_info['currency']
+        self.is_free = self.data['is_free']
+
+    def _imageURLs(self)->dict:
+        """
+        This method stores image resources of this game, for which
+        might be useful for future UI designs.
+        # TODO: better organization logic of urls, for now it is 
+        just all squashed in a dictionary.
+        """
+        images = {'screenshot': self.data['screenshots'],
+                  'background': self.data['background']}
+        return images
+
+    def _description(self, show=False):
+        """
+        Description text of the game. If show enabled the will print
+        out the text. (Mainly for test purpose)
+        """
+        self.detailed_description = self.data['detailed_description']
+        if show:
+            print(self.detailed_description)
+
+    def _packageInfo(self):
+        """
+        This method deal with package and DLC informations.
+        """
+        # To be done
+        pass
+
+
+    def _calc_price(self, amount)->float:
         """Prices from the API are represented by cents -- convert to dollars"""
         return float(amount) / 100.0
 
-    def _store_url(self, appid):
+    def _store_url(self, appid:str)->str:
         return "http://store.steampowered.com/app/{}".format(appid)
+    
+    # TODO: Some fields of json left unused. Add relevant methods on demand.
+    def _unusedFields(self)->list:
+        """
+        A helper function that remind developer who might be working on
+        this project that which fields of the json are not attatched as 
+        attributes of Game object.
+        """
+        unused = []
+        for attr in list(self.data.keys()):
+            if attr not in list(self.__dict__.keys()):
+                unused.append(attr)
+        return unused
