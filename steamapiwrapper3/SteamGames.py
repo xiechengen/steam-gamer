@@ -48,12 +48,11 @@ class Games(SteamAPI):
     def get_all(self, cc):
         """
         Gets all games currently in the Steam store (as a generator)
-
         args:
         cc -- Country Code
 
         """
-        if self.appids_to_names is None or self.names_to_appids is None:
+        if not (self.appids_to_names and self.names_to_appids):
             self.appids_to_names, self.names_to_appids = self.get_ids_and_names()
         
         urls = []
@@ -76,6 +75,8 @@ class Games(SteamAPI):
             game = Game(page[appid], appid)
             #print("game object created successfully")
             if game.success:
+                game._basicInfo()
+                game._priceInfo()
                 yield game
             else:
                 print("game object created successfully but game.success is not true")

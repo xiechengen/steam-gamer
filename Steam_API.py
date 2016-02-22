@@ -14,32 +14,35 @@ def process(rigion="CN"):
     file = open('%s.csv' % stamp, 'w', newline='', encoding='utf8')
     writer = csv.writer(file)
     games = Games()
-    getall = games.get_all(region)
+    getall = games.get_all(rigion)
     counter = 1
     for item in getall:
         try:
-            print("#%d" % counter, " ", item.appid, item.name, item.price)
-            writer.writerow([item.appid, item.name, item.price])
+            print("#%d" % counter, " ", item.appid, item.name, item.final)
+            writer.writerow([item.appid, item.name, item.final])
         except UnicodeEncodeError as error:
             print(error)
             continue    
         except Exception as e:
             print(e)
-        '''
+
         if counter >= 10:
             print("Experiment end")
             break
-        '''
+
         counter += 1
     file.close()
 
 if __name__ == '__main__':
+    process()
+"""
     start = time.clock()
     end = None
     try:
         process()
-    except:
+    except Exception as e:
         print('Unexcpected error occured, mission abort.')
+        print(e)
         end = time.clock()
     finally:
         if not end:
@@ -48,3 +51,4 @@ if __name__ == '__main__':
     m , s = divmod(timeConsumed, 60)
     h , m = divmod(m, 60)
     print ("It takes ", h ,"hours ", m, "minutes and ", s, "seconds.")
+"""
