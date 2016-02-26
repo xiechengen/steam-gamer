@@ -144,17 +144,17 @@ class Game(SteamAPI):
         else:
             print("Game object initialization failed...")
 
-    # TODO: wrap following 5 methods with a keyerror detecting decorator.
+
     def _basicInfo(self):
         """
         This method stores basic infomation of a game including 'name', 'type'
         'release_date' and 'platforms' to instance attributes when called.
         """
-        self.name = self.data['name']
-        self.type = self.data['type']
-        self.required_age = self.data['required_age']
-        self.release_date = self.data['release_date']['date']
-        self.platforms = self.data['platforms']
+        self.name = self.data['name'] if 'name' in self.data.values() else None
+        self.type = self.data['type'] if 'type' in self.data.values() else None
+        self.required_age = self.data['required_age'] if 'required_age' in self.data.values() else None
+        self.release_date = self.data['release_date']['date'] if 'date' in self.data['release_date'].values() else None
+        self.platforms = self.data['platforms'] if 'platforms' in self.data.values() else None
 
     def _priceInfo(self):
         """
@@ -191,7 +191,7 @@ class Game(SteamAPI):
         This method deal with package and DLC informations.
         """
         # To be done
-        pass
+        raise NotImplementedError
 
 
     def _calc_price(self, amount)->float:
