@@ -154,7 +154,7 @@ class Game(SteamAPI):
         self.type = self.data['type']
         self.required_age = self.data['required_age']
         self.release_date = self.data['release_date']['date']
-        self.platforms = self.data['platforms']   
+        self.platforms = self.data['platforms']
 
     def _priceInfo(self):
         """
