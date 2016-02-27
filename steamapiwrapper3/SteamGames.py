@@ -11,6 +11,9 @@ import urllib.request, urllib.parse, urllib.error
 import json
 from .SteamBase import SteamAPI
 
+# decorator for game class method:
+def keychecher(obj):
+    pass
 
 class Games(SteamAPI):
     """
