@@ -1,6 +1,8 @@
 import sqlite3
 from flask import Flask
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+import urllib2
+import json
 
 from steamapiwrapper.Users import SteamUser
 from steamapiwrapper.SteamGames import Games
@@ -41,7 +43,11 @@ def index():
 def cal():
     if request.method == 'POST':
         userid = request.form['userid']
-        user = SteamUser(userid, 'FC65FE32E5732FC54BC70256CDA122BB')
+
+        urloutput = urllib2.urlopen('http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=FC65FE32E5732FC54BC70256CDA122BB&vanityurl=' + userid)
+        print urloutput
+        steamid = json.load(urloutput)['response']['steamid']
+        user = SteamUser(steamid, 'FC65FE32E5732FC54BC70256CDA122BB')
         games = user.get_games()
 
         gamelist = []
