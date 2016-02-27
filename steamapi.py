@@ -51,7 +51,7 @@ for j in urls[:100]:
 
 getall = games.get_all("CN")
 counter = 0
-with open("api_output.csv", 'wb') as f:
+with open("dino_output.csv", 'wb') as f:
         file_writer = csv.writer(f, delimiter=',')
         for i in getall:
             try:
