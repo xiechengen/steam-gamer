@@ -1,9 +1,51 @@
-{{userid}}
+{% extends "base.html" %}
 
-{{sumprice}}
+{% block style %}
+<style>
+section .container {
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+</style>
+{% endblock %}
 
- <ul>
-    {% for n in gamelist %}
-    <li>{{n}}</li>
+{%block body %}
+
+<section>
+  <div class="container">
+  <div class="row">
+  <div class = "col-md-6 ">
+
+  <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">userid: {{userid}} 总价:¥{{sumprice}}</h3>
+  </div>
+  <div class="panel-body">
+   <table class="table">
+    <tbody>
+    <tr>
+    <th>Name</th>
+    <th>Price</th>
+    </tr>
+    {% for name in gamelist %}
+    <tr>
+    <td>{{name}}</td>
+    <td></td>
+    <tr>
     {% endfor %}
-  </ul>
+
+    </tbody>
+  </table>
+  </div>
+</div>
+
+
+
+
+
+</div>
+</div>
+</div>
+</section>
+
+{% endblock %}
