@@ -1,6 +1,6 @@
 import sqlite3
-from flask import Flask
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect
+from flask import url_for, abort, render_template, flash
 import urllib2
 import json
 
@@ -44,7 +44,9 @@ def cal():
     if request.method == 'POST':
         userid = request.form['userid']
 
-        urloutput = urllib2.urlopen('http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=FC65FE32E5732FC54BC70256CDA122BB&vanityurl=' + userid)
+        urloutput = urllib2.urlopen('http://api.steampowered.com/ISteamUser'
+            '/ResolveVanityURL/v0001/?key=FC65FE32E5732FC54BC70256CDA122BB&'
+            'vanityurl=' + userid)
         print urloutput
         steamid = json.load(urloutput)['response']['steamid']
         user = SteamUser(steamid, 'FC65FE32E5732FC54BC70256CDA122BB')
@@ -65,7 +67,10 @@ def cal():
             sumprice += int(i.price)
         print sumprice
         '''
-        return render_template('result.html', userid=userid, gamelist=gamelist, sumprice=sumprice)
+        return render_template('result.html',
+                                userid=userid,
+                                gamelist=gamelist,
+                                sumprice=sumprice)
     else:
         return render_template('calculator.html')
 
