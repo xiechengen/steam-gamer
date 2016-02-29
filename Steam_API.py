@@ -26,7 +26,7 @@ def process(rigion="CN"):
         except Exception as e:
             print(e)
 
-        if counter >= 10:
+        if counter >= 20:
             print("Experiment end")
             break
 

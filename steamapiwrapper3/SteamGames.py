@@ -2,7 +2,7 @@
 A small API wrapper intended to retrieve all available store information
 for either a specific appid, or all appids.
 
-Thanks for this SteamDB.info blog post for the idea on the best way to do this:
+Thanks for this SteamDB.info blog post for the idea on the best way to do it:
 http://steamdb.info/blog/5/
 
 """
@@ -12,8 +12,8 @@ import json
 from .SteamBase import SteamAPI
 
 # decorator for game class method:
-def keychecher(obj):
-    pass
+def keychecker(obj):
+    raise NotImplementedError
 
 class Games(SteamAPI):
     """
@@ -25,17 +25,18 @@ class Games(SteamAPI):
 
     # Get a generator for just the appids you specify
     some_games = games.get_appids_info([123,1245])
-
     """
 
-    def __init__(self, num=None):
+    def __init__(self, num=25):
         """
         args:
-        num -- number of games to query per call. The default 150 should work in most cases.
-
+        num -- number of games to query per call. The default 150 should work in
+        most cases.
         """
-        self.num = 25 if num is None else num
-        self.appids_to_names, self.names_to_appids = None, None
+        self.num = num
+        self.appids_to_names = None
+        self.names_to_appids = None
+
 
     def _create_url(self, appids, cc):
         """Given a list of appids, creates an API url to retrieve them"""
@@ -43,10 +44,12 @@ class Games(SteamAPI):
         data = {'appids': appids, 'cc': cc, 'l': 'english', 'v': '1'}
         return "http://store.steampowered.com/api/appdetails/?{}".format(urllib.parse.urlencode(data))
 
+
     def _get_urls(self, appids, cc):
         """Returns urls for all of appids"""
         list_of_ids = list(self._chunks(appids,self.num))
         return [self._create_url(x, cc) for x in list_of_ids]
+
 
     def get_all(self, cc):
         """
@@ -56,8 +59,9 @@ class Games(SteamAPI):
 
         """
         if not (self.appids_to_names and self.names_to_appids):
-            self.appids_to_names, self.names_to_appids = self.get_ids_and_names()
-        
+            self.appids_to_names = self.get_ids_and_names()[0]
+            self.names_to_appids = self.get_ids_and_names()[1]
+
         urls = []
         for i in list(self.appids_to_names.keys()):
             urls += self._get_urls([i], cc)
@@ -67,22 +71,22 @@ class Games(SteamAPI):
             for game in self._get_games_from(url):
                 yield game
 
+
     def _get_games_from(self, url):
         """Generator to create the actual game objects"""
         print("Start self._open_url...")
         response = self._open_url(url)
         print("Response get. Loading json of response page...")
         page = json.loads(response.read().decode('utf-8'))
-        #n = 0
         for appid in page:
             game = Game(page[appid], appid)
-            #print("game object created successfully")
             if game.success:
                 game._basicInfo()
                 game._priceInfo()
                 yield game
             else:
-                print("game object created successfully but game.success is not true")
+                print("game object created successfully but "
+                      "game.success is not true")
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""
@@ -93,7 +97,8 @@ class Games(SteamAPI):
 
     def get_ids_and_names(self):
         """
-        Returns two dicts: one mapping appid->game name, and one game name->appid
+        Returns two dicts:
+        one mapping appid->game name, and one game name->appid
         TODO: Refactor the code so we don't need to seperate dicts
 
         """
@@ -108,21 +113,24 @@ class Games(SteamAPI):
         return all_ids, all_names
 
     def get_id(self, game_name):
-        """Given an appid, returns the game name"""
+        """Given a game name returns its appid"""
         if self.appids_to_names is None or self.names_to_appids is None:
-            self.appids_to_names, self.names_to_appids = self.get_ids_and_names()
+            self.appids_to_names = self.get_ids_and_names()[0]
+            self.names_to_appids = self.get_ids_and_names()[1]
         if game_name in self.names_to_appids:
             return self.names_to_appids[game_name]
 
     def get_name(self, appid):
-        """Given a game name returns its appid"""
+        """Given an appid, returns the game name"""
         if self.appids_to_names is None or self.names_to_appids is None:
-            self.appids_to_names, self.names_to_appids = self.get_ids_and_names()
+            self.appids_to_names = self.get_ids_and_names()[0]
+            self.names_to_appids = self.get_ids_and_names()[1]
         if appid in self.appids_to_names:
             return self.appids_to_names[appid]
 
     def _chunks(self, params, number):
-        """Breaks a list into a set of equally sized chunked lists, with remaining entries in last list"""
+        """Breaks a list into a set of equally sized chunked lists, with
+         remaining entries in last list"""
         for i in range(0, len(params), number):
             yield params[i:i+number]
 
@@ -130,7 +138,8 @@ class Games(SteamAPI):
 class Game(SteamAPI):
     """
     The actual Game() object -- really this is just a wrapper around the base
-    json response from Steam, that makes it a bit easier to sift through the data.
+    json response from Steam, that makes it a bit easier to sift through the
+    data.
     Rewritten by Spencer on Feb 22nd 2016.
     """
     def __init__(self, game_json:dict, appid:str):
@@ -153,20 +162,23 @@ class Game(SteamAPI):
         This method stores basic infomation of a game including 'name', 'type'
         'release_date' and 'platforms' to instance attributes when called.
         """
-        self.name = self.data['name'] if 'name' in self.data.values() else None
-        self.type = self.data['type'] if 'type' in self.data.values() else None
-        self.required_age = self.data['required_age'] if 'required_age' in self.data.values() else None
-        self.release_date = self.data['release_date']['date'] if 'date' in self.data['release_date'].values() else None
-        self.platforms = self.data['platforms'] if 'platforms' in self.data.values() else None
+        self.name = self.data['name'] if 'name' in self.data.keys() else None
+        self.type = self.data['type'] if 'type' in self.data.keys() else None
+        self.required_age = self.data['required_age'] if 'required_age' in self.data.keys() else None
+        self.release_date = self.data['release_date']['date'] if 'date' in self.data['release_date'].keys() else None
+        self.platforms = self.data['platforms'] if 'platforms' in self.data.keys() else None
 
     def _priceInfo(self):
         """
         This method creates price related attributes when called.
         """
-        price_info = self.data['price_overview']
-        self.discount_percent = price_info['discount_percent']
-        self.final = price_info['final']
-        self.currency = price_info['currency']
+        if 'price_overview' in self.data.keys():
+            price_info = self.data['price_overview']
+            self.discount_percent = price_info['discount_percent']
+            self.final = price_info['final']
+            self.currency = price_info['currency']
+        else:
+            self.info = self.discount_percent = self.final = self.currency = None
         self.is_free = self.data['is_free']
 
     def _imageURLs(self)->dict:
@@ -185,9 +197,12 @@ class Game(SteamAPI):
         Description text of the game. If show enabled the will print
         out the text. (Mainly for test purpose)
         """
-        self.detailed_description = self.data['detailed_description']
-        if show:
-            print(self.detailed_description)
+        try:
+            self.detailed_description = self.data['detailed_description']
+            if show:
+                print(self.detailed_description)
+        except KeyError:
+            print('KeyError occured.')
 
     def _packageInfo(self):
         """
