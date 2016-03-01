@@ -171,15 +171,38 @@ class Game(SteamAPI):
     def _priceInfo(self):
         """
         This method creates price related attributes when called.
+        personal note by Steven: Sometimes there is no price_overview included in data even though 
+        is_free is false;So by default, we can't get the price detail etc. Moreover, price_in_cents_with_discount
+        is hidden somewhere in json. @@ Problem solved,price_in_cents_with_discounts means packages discounts@@
         """
-        if 'price_overview' in self.data.keys():
-            price_info = self.data['price_overview']
-            self.discount_percent = price_info['discount_percent']
-            self.final = price_info['final']
-            self.currency = price_info['currency']
+
+        if self.data['is_free']:
+            self.final = 'free game'
+            self.discount_percent = 0
         else:
-            self.info = self.discount_percent = self.final = self.currency = None
-        self.is_free = self.data['is_free']
+            if 'price_overview' in self.data.keys():
+                price_info = self.data['price_overview']
+                self.discount_percent = price_info['discount_percent']
+                self.final = price_info['final']
+                self.currency = price_info['currency']
+                self.is_free = self.data['is_free']
+            else:
+                price_info = 'unknown'
+                self.discount_percent = 'unknown'
+                self.final = 'unknown'
+                self.currency = 'unknown'
+                self.is_free = 'unknown'
+                """
+                if 'package_groups' in self.data.keys():
+                    self.final = self.data['package_groups'][0]['subs'][0]['price_in_cents_with_discount']
+                    self.discount_percent = 'unknown'
+                else:
+                    price_info == 'unknown'
+                    self.discount_percent = 'unknown'
+                    self.final = 'unknown'
+                    self.currency = 'unknown'
+                    self.is_free = 'unknown'
+                """
 
     def _imageURLs(self)->dict:
         """
