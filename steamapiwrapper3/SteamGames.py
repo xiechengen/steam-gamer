@@ -74,9 +74,9 @@ class Games(SteamAPI):
 
     def _get_games_from(self, url):
         """Generator to create the actual game objects"""
-        print("Start self._open_url...")
+        # print("Start self._open_url...")
         response = self._open_url(url)
-        print("Response get. Loading json of response page...")
+        # print("Response get. Loading json of response page...")
         page = json.loads(response.read().decode('utf-8'))
         for appid in page:
             game = Game(page[appid], appid)
@@ -154,7 +154,7 @@ class Game(SteamAPI):
             self.store_url = self._store_url(self.appid)
             self.data = game_json['data']
         else:
-            print("Game object initialization failed...")
+            print("Game %s initialization failed..." % self.appid)
 
 
     def _basicInfo(self):

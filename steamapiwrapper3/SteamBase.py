@@ -2,13 +2,14 @@ import json
 import datetime
 import urllib.request, urllib.error, urllib.parse
 from time import sleep
+from .ordinal import ordinal
 
 class SteamError(Exception):
     pass
 
 class SteamAPI:
     """Base class for our other Steam API classes"""
-    time = 5
+    time = 10
     retries = 20
     def __init__(self, steam_id, api_key):
         """Sets the steam id of the user in question and your API key."""
@@ -35,7 +36,7 @@ class SteamAPI:
 
         """
         try:
-            print("try open url request")
+            # print("try open url request")
             return urllib.request.urlopen(url)
         except urllib.error.URLError as e:
             print('URLError = ' + str(e.reason))
@@ -50,12 +51,12 @@ class SteamAPI:
 
     def _retry(self, url):
         """Retries your request n number of times"""
-        print("{} is unreachable, retrying {} number of times".format(url, self.retries))
+        print("%s is unreachable..." % url)
         for num in range(self.retries):
             try:
                 return urllib.request.urlopen(url)
             except:
-                print('Retry %d time of %d total times...' % (num, self.retries))
+                print('Retrying %s time of %d total times...' % (ordinal(num+1), self.retries))
                 sleep(self.time * (1 + self.retries))
         raise SteamError('Can not connect to Steam. Try again later.')
         
