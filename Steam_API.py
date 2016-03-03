@@ -11,7 +11,7 @@ def process(rigion="CN"):
     games on given area of steam.
     """
     stamp = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
-    file = open('run%s.csv' % stamp, 'w', newline='', encoding='utf8')
+    file = open('outputs\\run%s.csv' % stamp, 'w', newline='', encoding='utf8')
     writer = csv.writer(file)
     games = Games()
     getall = games.get_all(rigion)
