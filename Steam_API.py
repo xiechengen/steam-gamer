@@ -11,7 +11,7 @@ def process(rigion="CN"):
     games on given area of steam.
     """
     stamp = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
-    file = open('%s.csv' % stamp, 'w', newline='', encoding='utf8')
+    file = open('run%s.csv' % stamp, 'w', newline='', encoding='utf8')
     writer = csv.writer(file)
     games = Games()
     getall = games.get_all(rigion)
@@ -25,17 +25,16 @@ def process(rigion="CN"):
             continue    
         except Exception as e:
             print(e)
-
-        if counter >= 20:
+        '''
+        if counter >= 10:
             print("Experiment end")
             break
-
+        '''
         counter += 1
     file.close()
 
 if __name__ == '__main__':
-    process()
-"""
+
     start = time.clock()
     end = None
     try:
@@ -50,5 +49,4 @@ if __name__ == '__main__':
         timeConsumed = end - start
     m , s = divmod(timeConsumed, 60)
     h , m = divmod(m, 60)
-    print ("It takes ", h ,"hours ", m, "minutes and ", s, "seconds.")
-"""
+    print ("It takes %d hours %d minutes %.2f seconds." % (h, m, s))
