@@ -22,10 +22,10 @@ A project building a web app for steam sales and price tracker
 2. get all app id: http://api.steampowered.com/ISteamApps/GetAppList/v0001/
 
 
+##database schema
 
-$.ajax({
-  url: 'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=FC65FE32E5732FC54BC70256CDA122BB&vanityurl=xiechengen',
-  dataType: 'jsonp',
-  success: function(data){// your code here
-  }
-});
+appid(pk)
+name
+price
+storeurl
+imgurl
