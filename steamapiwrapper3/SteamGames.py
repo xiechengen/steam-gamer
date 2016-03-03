@@ -150,7 +150,7 @@ class Game(SteamAPI):
         """
         self.appid = appid
         self.success = game_json['success']
-        if self.success:
+        if self.success and game_json['data']['type'] == 'game':
             self.store_url = self._store_url(self.appid)
             self.data = game_json['data']
         else:
