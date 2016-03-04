@@ -81,12 +81,14 @@ class Games(SteamAPI):
         for appid in page:
             game = Game(page[appid], appid)
             if game.success:
-                game._basicInfo()
-                game._priceInfo()
-                yield game
+                if game.data['type'] == 'game':
+                    game._basicInfo()
+                    game._priceInfo()
+                    yield game
+                else:
+                    print("Item %s is not a game." % game.appid)
             else:
-                print("game object created successfully but "
-                      "game.success is not true")
+                print("game.success is False")
 
     def get_info_for(self, appids, cc):
         """Given a list of appids, returns their Game objects"""
