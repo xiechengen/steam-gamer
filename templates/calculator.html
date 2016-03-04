@@ -9,6 +9,11 @@
     color: #000;
     background: #fff;
 }
+
+header .container {
+    padding-top: 300px;
+    padding-bottom: 400px;
+}
 </style>
 {% endblock %}
 
@@ -18,7 +23,7 @@
   <div class="container">
   <div class="row">
     <div class = "col-md-6 col-md-offset-3">
-    
+    <div class = "jumbotron">
       <h2 >
       steam土豪计算器
       </h2>
@@ -27,7 +32,7 @@
     <form class="form-inline" action="/calculator" method = "POST">
     <div class="form-group" >
       <div class="input-group">
-      <input type="text" name = "userid" class="form-control" placeholder="Enter your Steam ID" aria-describedby="basic-addon1" v-model = "userid" >
+      <input type="text" name = "userid" class="form-control" placeholder="输入你的steamid" aria-describedby="basic-addon1" v-model = "userid" >
       <span class="input-group-btn">
       <button class="btn btn-default" type="submit" >Go!</button>
       </span>
@@ -35,7 +40,7 @@
     </div>
     </form>
     
-
+    </div>
     </div>
     </div>
   </div>
