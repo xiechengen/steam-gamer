@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style> 
+  h2{text-align: center}
+
+  header {
+    text-align: center;
+    color: #000;
+    background: #fff;
+}
+
+header .container {
+    padding-top: 200px;
+    padding-bottom: 150px;
+}
+</style>
+{% endblock %}
+    {% block body %}
+    <header>
+     <div class="container">
+     <div class = "col-md-6 col-md-offset-3">
+     <div class = "jumbotron">
+     
+      <form >
+        <h2 >使用你的steam账号登陆</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+      </div>
+      </div>
+    </div> 
+
+    </header>
+
+    {% endblock %}

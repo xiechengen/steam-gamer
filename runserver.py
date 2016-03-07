@@ -7,7 +7,15 @@ import json
 from steamapiwrapper.Users import SteamUser
 from steamapiwrapper.SteamGames import Games
 
+'''
+from flask_sqlalchemy import SQLAlchemy
+from flask_openid import OpenID
 
+app = Flask(__name__)
+#app.config.from_pyfile('settings.cfg')
+db = SQLAlchemy(app)
+oid = OpenID(app)
+'''
 # configuration
 DATABASE = 'steam-gamer.db'
 DEBUG = True
@@ -21,6 +29,9 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.debug = True
 
+
+
+'''
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
@@ -34,9 +45,14 @@ def teardown_request(exception):
     if db is not None:
         db.close()
 
+'''
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/signin')
+def sigin():
+    return render_template('signin.html')
 
 
 @app.route('/calculator', methods=['GET', 'POST'])
