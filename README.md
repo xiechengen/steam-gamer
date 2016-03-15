@@ -1,4 +1,5 @@
-# steamgamer
+# steamgamer 
+[![Code Climate](https://codeclimate.com/repos/56e7a5f1de14583404002836/badges/475ffceb0754ba652917/gpa.svg)](https://codeclimate.com/repos/56e7a5f1de14583404002836/feed)
 A project building a web app for steam sales and price tracker
 
 ######steven rogered that!
