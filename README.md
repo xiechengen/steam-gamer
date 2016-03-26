@@ -1,4 +1,5 @@
-# steamgamer
+# steamgamer [![Code Climate](https://codeclimate.com/repos/56e7a5f1de14583404002836/badges/475ffceb0754ba652917/gpa.svg)](https://codeclimate.com/repos/56e7a5f1de14583404002836/feed)
+
 A project building a web app for steam sales and price tracker
 
 ######steven rogered that!
@@ -15,8 +16,10 @@ A project building a web app for steam sales and price tracker
 5. python steam web api : https://github.com/naiyt/steamapiwrapper]
 6. steam store front api: https://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI
 7. steam username to id : http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=FC65FE32E5732FC54BC70256CDA122BB&vanityurl=xiechengen
+
 8. Flask steam sing-in example http://flask.pocoo.org/snippets/42/
 9. Flask-Login https://flask-login.readthedocs.org/en/latest/
+
 
 
 ### useful apis
