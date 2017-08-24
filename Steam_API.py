@@ -22,7 +22,7 @@ def process(rigion="CN"):
             writer.writerow([item.appid, item.name, item.final])
         except UnicodeEncodeError as error:
             print(error)
-            continue    
+            continue
         except Exception as e:
             print(e)
         '''
@@ -32,6 +32,12 @@ def process(rigion="CN"):
         '''
         counter += 1
     file.close()
+
+def new_processor(rigion="CN"):
+    '''
+    doc string empty for now
+    '''
+    return 0
 
 if __name__ == '__main__':
 
